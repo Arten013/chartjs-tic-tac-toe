@@ -10,6 +10,10 @@ import { computed, ref } from 'vue';
 import { Scatter } from 'vue-chartjs';
 
 Chart.register(...registerables);
+const url = new URL(window.location.href);
+const player1 = url.searchParams.get('player1') ?? 'Player 1';
+const player2 = url.searchParams.get('player2') ?? 'Player 2';
+
 
 type CellIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 const unFilledCells = ref<CellIndex[]>([0, 1, 2, 3, 4, 5, 6, 7, 8])
@@ -77,7 +81,7 @@ const data = computed<ChartData<"scatter">>(() => ({
       pointStyle: nextPlayer.value === 'player1' ? 'circle' : nextPlayer.value === 'player2' ? 'crossRot' : ''
     },
     {
-      label: 'Player 1',
+      label: player1,
       data: player1Cells.value.map(cellIndexToCoord),
       pointStyle: 'circle',
       backgroundColor: 'transparent',
@@ -88,7 +92,7 @@ const data = computed<ChartData<"scatter">>(() => ({
       pointHoverRadius: 20,
     },
     {
-      label: 'Player 2',
+      label: player2,
       data: player2Cells.value.map(cellIndexToCoord),
       pointStyle: 'crossRot',
       backgroundColor: 'transparent',
@@ -140,7 +144,7 @@ const options = computed<ChartOptions<"scatter">>(() => ({
       },
       title: {
         display: true,
-        text: "O Player 1" + (winningPlayer.value === "player1" ? " Wins!!" : ""),
+        text: "O " + player1 + (winningPlayer.value === "player1" ? " Wins!!" : ""),
         color: winningPlayer.value === undefined ? nextPlayer.value === 'player1' ? player1Color : 'rgba(0, 0, 0, 0.3)' : winningPlayer.value === 'player1' ? player1Color : 'rgba(0, 0, 0, 0.3)',
       }
     },
@@ -155,7 +159,7 @@ const options = computed<ChartOptions<"scatter">>(() => ({
       },
       title: {
         display: true,
-        text: "X Player 2" + (winningPlayer.value === "player2" ? " Wins!!" : ""),
+        text: "X " + player2 + (winningPlayer.value === "player2" ? " Wins!!" : ""),
         color: winningPlayer.value === undefined ? nextPlayer.value === 'player2' ? player2Color : 'rgba(0, 0, 0, 0.3)' : winningPlayer.value === 'player2' ? player2Color : 'rgba(0, 0, 0, 0.3)',
       }
     },
